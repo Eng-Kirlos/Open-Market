@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>Open Market</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Open Market</h1>
+    <p>
+      <a href="register.html">تسجيل</a>
+      <a href="login.html">تسجيل دخول</a>
+      <span id="gear" class="settings-icon" onclick="openControl()">⚙️</span>
+    </p>
+  </header>
+
+  <nav>
+    <a href="index.html">الرئيسية</a>
+    <a href="products.html">المنتجات</a>
+    <a href="cart.html">عربة التسوق</a>
+  </nav>
+
+  <!-- سلايدر دعائي -->
+  <section class="slider">
+    <div class="slide fade"><img src="images/banner1.png" alt="شموع طبيعية"><div class="caption">✨ شموع طبيعية فاخرة ✨</div></div>
+    <div class="slide fade"><img src="images/banner2.jpg" alt="شوكولاتة"><div class="caption">🍫 نكهات شوكولاتة مميزة 🍫</div></div>
+    <div class="slide fade"><img src="images/banner3.png" alt="هدايا"><div class="caption">🎁 منتجات يدوية فريدة 🎁</div></div>
+    <div class="slide fade"><img src="images/banner4.jpg" alt="رومانسية"><div class="caption">❤️ أجواء رومانسية ساحرة ❤️</div></div>
+    <div class="slide fade"><img src="images/banner5.jpg" alt="ديكور"><div class="caption">🏠 ديكور منزلي أنيق 🏠</div></div>
+  </section>
+
+  <section class="hero">
+    <p>منتجاتنا تجمع بين الشموع الطبيعية والشوكولاتة الفاخرة لتجربة لا تُنسى.</p>
+    <a href="products.html"><button>تسوق الآن</button></a>
+  </section>
+
+  <footer>
+    <p>© جميع الحقوق محفوظة لـ Open Market</p>
+  </footer>
+
+  <script>
+    const role = localStorage.getItem("role");
+    document.getElementById("gear").style.display = (role === "admin") ? "inline" : "none";
+
+    function openControl() {
+      let pass = prompt("أدخل كلمة المرور:");
+      if(pass === "P@ssw0rd@Wax") window.location.href = "control.html";
+      else alert("كلمة المرور غير صحيحة!");
+    }
+
+    let slideIndex = 0;
+    showSlides();
+    function showSlides() {
+      let slides = document.getElementsByClassName("slide");
+      for (let i = 0; i < slides.length; i++) slides[i].style.display = "none";
+      slideIndex++;
+      if (slideIndex > slides.length) slideIndex = 1;
+      slides[slideIndex-1].style.display = "block";
+      setTimeout(showSlides, 2000); // كل ثانيتين
+    }
+  </script>
+</body>
+</html>
