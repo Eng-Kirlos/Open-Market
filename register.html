@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>تسجيل العملاء</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    form {
+      width: 50%;
+      margin: 30px auto;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #fafafa;
+    }
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>تسجيل بيانات العميل</h1>
+  </header>
+
+  <nav>
+    <a href="index.html">الرئيسية</a>
+    <a href="products.html">المنتجات</a>
+    <a href="cart.html">عربة التسوق</a>
+  </nav>
+
+  <form onsubmit="saveCustomerData(event)">
+    <label for="name">الاسم الكامل</label>
+    <input type="text" id="name" required>
+
+    <label for="phone">رقم الهاتف</label>
+    <input type="text" id="phone" required>
+
+    <label for="email">البريد الإلكتروني</label>
+    <input type="email" id="email" required>
+
+    <button type="submit">حفظ البيانات</button>
+  </form>
+
+  <footer>
+    <p>© جميع الحقوق محفوظة لشركة KM Integrated Services</p>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    function saveCustomerData(e) {
+      e.preventDefault();
+      const name = document.getElementById("name").value;
+      const phone = document.getElementById("phone").value;
+      const email = document.getElementById("email").value;
+
+      saveCustomer(name, phone, email);
+    }
+  </script>
+</body>
+</html>

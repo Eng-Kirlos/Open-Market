@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>عربة التسوق</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .cart {
+      width: 80%;
+      margin: 20px auto;
+      border-collapse: collapse;
+    }
+    .cart th, .cart td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+    .cart th {
+      background-color: #f2f2f2;
+    }
+    .total, .order-id {
+      text-align: right;
+      margin: 20px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .actions {
+      text-align: center;
+      margin: 20px;
+    }
+    .actions button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>عربة التسوق</h1>
+  </header>
+
+  <nav>
+    <a href="index.html">الرئيسية</a>
+    <a href="products.html">المنتجات</a>
+    <a href="register.html">تسجيل العملاء</a>
+  </nav>
+
+  <table class="cart" id="cart-table">
+    <thead>
+      <tr>
+        <th>المنتج</th>
+        <th>السعر</th>
+        <th>الكمية</th>
+        <th>الإجمالي</th>
+        <th>إزالة</th>
+      </tr>
+    </thead>
+    <tbody id="cart-body">
+      <!-- المنتجات هتظهر هنا -->
+    </tbody>
+  </table>
+
+  <!-- رقم الأوردر يظهر هنا -->
+  <div class="order-id" id="order-id">رقم الأوردر: سيتم توليده عند الإرسال</div>
+
+  <div class="total" id="cart-total">الإجمالي: 0 درهم</div>
+
+  <div class="actions">
+    <button onclick="checkoutWhatsApp()">إرسال الطلب عبر واتساب</button>
+    <button onclick="window.location.href='products.html'">متابعة التسوق</button>
+  </div>
+
+  <footer>
+    <p>© جميع الحقوق محفوظة لشركة KM Integrated Services</p>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    // توليد رقم أوردر عند فتح الصفحة
+    function showOrderID() {
+      let orderID = generateOrderID();
+      document.getElementById("order-id").innerText = "رقم الأوردر: " + orderID;
+      // نخزن رقم الأوردر مؤقتًا في LocalStorage علشان يتبعت مع الرسالة
+      localStorage.setItem("currentOrderID", orderID);
+    }
+    showOrderID();
+  </script>
+</body>
+</html>

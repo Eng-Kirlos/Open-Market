@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>لوحة التحكم</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { font-family: Tahoma, sans-serif; direction: rtl; }
+    nav { margin: 20px; }
+    nav button { margin: 5px; padding: 10px; }
+    .tab { display: none; margin: 20px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+    th { background-color: #f2f2f2; }
+    input, button { padding: 5px; margin: 5px; }
+    .search-box { margin: 10px 0; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>لوحة التحكم</h1>
+  </header>
+
+  <nav>
+    <button onclick="showTab('orders')">📦 الطلبات</button>
+    <button onclick="showTab('products')">🛍️ المنتجات</button>
+  </nav>
+
+  <!-- تبويب الطلبات -->
+  <div id="orders" class="tab">
+    <h2>قائمة الطلبات</h2>
+    <div class="search-box">
+      <input type="text" id="searchOrder" placeholder="ابحث برقم الأوردر أو اسم العميل">
+      <button onclick="searchOrders()">🔍 بحث</button>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>رقم الأوردر</th>
+          <th>الاسم</th>
+          <th>الهاتف</th>
+          <th>البريد</th>
+          <th>عرض</th>
+        </tr>
+      </thead>
+      <tbody id="orders-body"></tbody>
+    </table>
+  </div>
+
+  <!-- تبويب المنتجات -->
+  <div id="products" class="tab">
+    <h2>إدارة المنتجات</h2>
+    <form onsubmit="addProduct(event)">
+      <input type="text" id="pName" placeholder="اسم المنتج" required>
+      <input type="number" id="pPrice" placeholder="السعر" required>
+      <input type="file" id="pImage" accept="image/*" required>
+      <button type="submit">➕ إضافة منتج</button>
+    </form>
+
+    <table>
+      <thead>
+        <tr>
+          <th>المنتج</th>
+          <th>السعر</th>
+          <th>الصورة</th>
+          <th>تعديل / حذف</th>
+        </tr>
+      </thead>
+      <tbody id="products-body"></tbody>
+    </table>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    // عرض التبويب المطلوب
+    function showTab(tabId) {
+      document.querySelectorAll('.tab').forEach(tab => tab.style.display = 'none');
+      document.getElementById(tabId).style.display = 'block';
+    }
+    showTab('orders'); // افتراضي الطلبات
+
+    // تحميل الطلبات من LocalStorage (هنا لازم نخزن كل الأوردرات في Array لاحقاً)
+    function loadOrders() {
+      let ordersBody = document.getElementById("orders-body");
+      ordersBody.innerHTML = "";
+
+      let customerData = JSON.parse(localStorage.getItem("customer"));
+      let cartData = JSON.parse(localStorage.getItem("cart"));
+
+      if (customerData && customerData.orderID) {
+        let row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${customerData.orderID}</td>
+          <td>${customerData.name}</td>
+          <td>${customerData.phone}</td>
+          <td>${customerData.email}</td>
+          <td><button onclick="viewOrder()">👁️ عرض</button></td>
+        `;
+        ordersBody.appendChild(row);
+      }
+    }
+
+    // بحث في الطلبات
+    function searchOrders() {
+      let keyword = document.getElementById("searchOrder").value.toLowerCase();
+      let customerData = JSON.parse(localStorage.getItem("customer"));
+      let ordersBody = document.getElementById("orders-body");
+      ordersBody.innerHTML = "";
+
+      if (customerData && (customerData.orderID.toLowerCase().includes(keyword) || customerData.name.toLowerCase().includes(keyword))) {
+        let row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${customerData.orderID}</td>
+          <td>${customerData.name}</td>
+          <td>${customerData.phone}</td>
+          <td>${customerData.email}</td>
+          <td><button onclick="viewOrder()">👁️ عرض</button></td>
+        `;
+        ordersBody.appendChild(row);
+      } else {
+        ordersBody.innerHTML = "<tr><td colspan='5'>لا توجد نتائج</td></tr>";
+      }
+    }
+
+    // عرض تفاصيل الطلب
+    function viewOrder() {
+      let customerData = JSON.parse(localStorage.getItem("customer"));
+      let cartData = JSON.parse(localStorage.getItem("cart"));
+      alert(
+        "رقم الأوردر: " + customerData.orderID + "\n" +
+        "الاسم: " + customerData.name + "\n" +
+        "الهاتف: " + customerData.phone + "\n" +
+        "البريد: " + customerData.email + "\n\n" +
+        "المنتجات:\n" + (cartData ? cartData.map(i => i.name + " x" + i.quantity).join("\n") : "تم الإرسال")
+      );
+    }
+
+    // إدارة المنتجات
+    let products = JSON.parse(localStorage.getItem("products")) || [];
+
+    function renderProducts() {
+      let productsBody = document.getElementById("products-body");
+      productsBody.innerHTML = "";
+      products.forEach((p, i) => {
+        let row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${p.name}</td>
+          <td>${p.price} درهم</td>
+          <td><img src="${p.image}" width="50"></td>
+          <td>
+            <button onclick="editProduct(${i})">✏️ تعديل</button>
+            <button onclick="deleteProduct(${i})">🗑️ حذف</button>
+          </td>
+        `;
+        productsBody.appendChild(row);
+      });
+    }
+
+    function addProduct(e) {
+      e.preventDefault();
+      let name = document.getElementById("pName").value;
+      let price = document.getElementById("pPrice").value;
+      let imageFile = document.getElementById("pImage").files[0];
+
+      let reader = new FileReader();
+      reader.onload = function(event) {
+        products.push({ name, price, image: event.target.result });
+        localStorage.setItem("products", JSON.stringify(products));
+        renderProducts();
+      };
+      reader.readAsDataURL(imageFile);
+
+      e.target.reset();
+    }
+
+    function editProduct(i) {
+      let newName = prompt("اسم جديد:", products[i].name);
+      let newPrice = prompt("سعر جديد:", products[i].price);
+      if (newName && newPrice) {
+        products[i].name = newName;
+        products[i].price = newPrice;
+        localStorage.setItem("products", JSON.stringify(products));
+        renderProducts();
+      }
+    }
+
+    function deleteProduct(i) {
+      products.splice(i, 1);
+      localStorage.setItem("products", JSON.stringify(products));
+      renderProducts();
+    }
+
+    // تشغيل عند فتح الصفحة
+    loadOrders();
+    renderProducts();
+  </script>
+</body>
+</html>

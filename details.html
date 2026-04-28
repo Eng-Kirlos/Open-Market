@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>تفاصيل المنتج</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header><h1>تفاصيل المنتج</h1></header>
+  <nav>
+    <a href="index.html">الرئيسية</a>
+    <a href="products.html">المنتجات</a>
+    <a href="cart.html">عربة التسوق</a>
+  </nav>
+
+  <section id="product-details"></section>
+
+  <footer><p>© جميع الحقوق محفوظة لشركة شمع و شيكولاته</p></footer>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const product = params.get("product");
+    const products = {
+      bubble:{name:"شمعة بنفسجية بابلز",price:100,image:"شمعة بنفسجية بابلز.png",desc:"شمعة ديكورية عطرية بشكل فقاعات"},
+      violet:{name:"شمعة الزهرة البنفسجية",price:120,image:"شمعة الزهرة البنفسجية.png",desc:"شمعة فواحة برائحة الزهرة البنفسجية"},
+      pink:{name:"شمعة وردة وردية",price:90,image:"شمعة وردة وردية.png",desc:"شمعة على شكل وردة وردية"},
+      christmas:{name:"شمعة شجرة الكريسماس",price:145,image:"شمعة شجرة الكريسماس.png",desc:"شمعة على شكل شجرة كريسماس"},
+      neighbor:{name:"شمعة الجار",price:165,image:"شمعة الجار.png",desc:"شمعة مميزة برائحة دافئة"},
+      snowwhite:{name:"شمعة بياض الثلج",price:80,image:"شمعة بي
